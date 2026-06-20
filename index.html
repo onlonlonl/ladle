@@ -3,13 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ladle · 廚房</title>
+<title>Ladle</title>
 <link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAADKUlEQVR4nO3cMW7UQABA0QVBwQHo4EapKek4BBI9B0Ci4QbUqTkDnAE6ChpQRNJQICii/YiNZ2wH3itX2bU1/pl1RuPcufz25QDH3N36BNgvcZDEQRIHSRwkcZDEQRIHSRwkcZDEQRIHSRwkcZDEQRIHSRwkcZDEQbq30nGuLlY60H/i/oMVDjI5Dk1M8ntgZ1YyLQ5ZrOPnOM9JZM49hzJWNmfAJ8ShjE1MGPbRcShjQ6MHf+g9hzJ+efbkbMjnvHl7ftobri4G3n+MmzmUsRPjLsSgOJSxK4Mux4g4lLFDIy6K5XPS4jhMG7u1+NKYOUjiIC1b5/CdcqJatxi1LnLdsmUPMwdJHCRxkMRBEgdJHCRxkNbafc7hcOj1jJP3bazCzEESB0kcJHGQxEESB0kcJHGQxEESB0kcJHGQxEESB0kcJHGQxEESB0kcJHGQxEESB0kcJHGQxEESB0kcJHGQxEESB0kcJHGQxEESB0kcJHGQxEESB0kcJHGQxEESB0kcJHGQxEESB0kcJHGQxEESB0kcJHGQxEESB0kcJHGQxEESB0kcJHGQxEESB0kcpDuX377c/N1XF3/5g8+enN38KP+xN2/Pl37E/Qc3fquZgyQOkjhI4iCJgyQOkjhI97Y9/KsXT4++/vX9u5XPZFvPzz9tfQpHmDlI4iCJgyQOkjhI4iCJg7TxOse/6uPHz0dff/z44cpnsoSZgyQOkjhI4iCJgyQOkjhIKz23Uup5lpdnjxZ+8rZqneP1h+9HXx/wfErx3AoziIMkDpI4SOIgiYMkDtJO93PUcxx7W/84dT3jdjFzkMRBEgdJHCRxkMRBEgdp2X6Ow4AtHSe5Lf/PdOL+jJMs2MxxMHPwB+IgLY5j2cTFRIsvjZmDNCIOk8cOjbgog2YOfezKoMsx7mtFHzsx7kIsXue4Zt1lD64b+is6+obU/LGh0YM/4a8VfWxiwrDP+VNWHyubM+DT9pD+PF23ILPN/D2cvMH496mrZKxV5ua1dp/7ormFLJ+TxEESB0kcJHGQxEESB0kcJHGQxEESB0kcJHGQxEESB0kcJHGQxEESB+kHA7ly1Y7an20AAAAASUVORK5CYII=">
 <link href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" rel="stylesheet">
 <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
 <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
 <style>
-* { margin:0; padding:0; box-sizing:border-box; }
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; border-radius:0; }
+select, input, button, textarea { border-radius:0; -webkit-appearance:none; -moz-appearance:none; appearance:none; }
 body {
   font-family:'DotGothic16', monospace;
   background:#f5efe6;
@@ -156,43 +157,43 @@ async function api(base, path, opts) {
 // ---------- helpers ----------
 const SLOTS = [{
   key: 'morning',
-  label: '11:00 順口'
+  label: '11:00 LIGHT'
 }, {
   key: 'evening',
-  label: '21:00 正餐'
+  label: '21:00 MAIN'
 }];
 const OUTCOMES = [{
   key: 'smooth',
-  label: '順利',
+  label: 'SMOOTH',
   mark: '◎'
 }, {
   key: 'ok',
-  label: '還行',
+  label: 'OK',
   mark: '○'
 }, {
   key: 'flop',
-  label: '翻車',
+  label: 'FLOP',
   mark: '✕'
 }];
 const LOCS = [{
   key: 'fridge',
-  label: '冷藏'
+  label: 'FRIDGE'
 }, {
   key: 'freezer',
-  label: '冷凍'
+  label: 'FREEZER'
 }, {
   key: 'pantry',
-  label: '儲物'
+  label: 'PANTRY'
 }];
 const KINDS = [{
   key: 'fresh',
-  label: '生鮮'
+  label: 'FRESH'
 }, {
   key: 'staple',
-  label: '囤貨'
+  label: 'STAPLE'
 }, {
   key: 'oneoff',
-  label: '一次性'
+  label: 'ONE-OFF'
 }];
 function mondayOf(d) {
   const x = new Date(d);
@@ -204,7 +205,7 @@ function fmt(d) {
   return d.toISOString().slice(0, 10);
 }
 function wdName(d) {
-  return ['日', '一', '二', '三', '四', '五', '六'][new Date(d + 'T00:00:00').getDay()];
+  return ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'][new Date(d + 'T00:00:00').getDay()];
 }
 function stars(n) {
   return '★'.repeat(n) + '☆'.repeat(Math.max(0, 3 - n));
@@ -248,7 +249,7 @@ function TopBar() {
   }, "LADLE"));
 }
 function NavRow(props) {
-  const tabs = [['menu', '菜單'], ['recipes', '食譜'], ['fridge', '冰箱'], ['logs', '日誌']];
+  const tabs = [['menu', 'MENU'], ['recipes', 'RECIPES'], ['fridge', 'FRIDGE'], ['logs', 'LOGS']];
   return /*#__PURE__*/React.createElement("div", {
     className: "navrow"
   }, tabs.map(function (t) {
@@ -278,7 +279,7 @@ function ConnectPage(props) {
     className: "big-title"
   }, "LADLE"), /*#__PURE__*/React.createElement("div", {
     className: "hint"
-  }, "\u8F38\u5165 Supabase URL(\u5230 .co \u70BA\u6B62)"), /*#__PURE__*/React.createElement("input", {
+  }, "enter Supabase URL (up to .co)"), /*#__PURE__*/React.createElement("input", {
     className: "inp",
     value: v,
     placeholder: "https://xxxx.supabase.co",
@@ -289,13 +290,13 @@ function ConnectPage(props) {
     className: "btn dk",
     onClick: function () {
       if (v.indexOf('supabase.co') === -1) {
-        alert('URL 看起來不對');
+        alert('URL does not look right');
         return;
       }
       setBaseUrl(v);
       props.onDone();
     }
-  }, "\u9023\u63A5"));
+  }, "CONNECT"));
 }
 
 // ---------- home ----------
@@ -308,10 +309,10 @@ function HomePage(props) {
     className: "big-title"
   }, "LADLE"), /*#__PURE__*/React.createElement("div", {
     className: "hint"
-  }, "\u5EDA\u623F \xB7 for Iris & Lux"), /*#__PURE__*/React.createElement("button", {
+  }, "kitchen \xB7 for Iris & Lux"), /*#__PURE__*/React.createElement("button", {
     className: "btn dk",
     onClick: props.enter
-  }, "\u9032\u5165\u5EDA\u623F"));
+  }, "ENTER"));
 }
 
 // ---------- menu page ----------
@@ -321,7 +322,7 @@ function MenuPage(props) {
   const [items, setItems] = useState([]);
   const [recipes, setRecipes] = useState([]);
   const [shop, setShop] = useState([]);
-  const [editCell, setEditCell] = useState(null); // {date, slot}
+  const [editCell, setEditCell] = useState(null);
   const [pick, setPick] = useState('');
   const [custom, setCustom] = useState('');
   const [special, setSpecial] = useState(false);
@@ -434,7 +435,7 @@ function MenuPage(props) {
       key: d
     }, /*#__PURE__*/React.createElement("div", {
       className: "day-head"
-    }, "\u9031", wdName(d), " ", /*#__PURE__*/React.createElement("span", {
+    }, wdName(d), " ", /*#__PURE__*/React.createElement("span", {
       className: "day-date"
     }, d.slice(5))), SLOTS.map(function (s) {
       const it = cellItem(d, s.key);
@@ -463,14 +464,14 @@ function MenuPage(props) {
         }
       }, /*#__PURE__*/React.createElement("option", {
         value: ""
-      }, "(\u9078\u98DF\u8B5C)"), recipes.map(function (r) {
+      }, "(pick recipe)"), recipes.map(function (r) {
         return /*#__PURE__*/React.createElement("option", {
           key: r.id,
           value: r.id
         }, r.name);
       })), /*#__PURE__*/React.createElement("input", {
         className: "inp sm",
-        placeholder: "\u6216\u81EA\u5B9A\u7FA9(\u5916\u98DF\u7B49)",
+        placeholder: "or custom (eat out, etc.)",
         value: custom,
         onChange: function (e) {
           setCustom(e.target.value);
@@ -483,15 +484,15 @@ function MenuPage(props) {
         onChange: function (e) {
           setSpecial(e.target.checked);
         }
-      }), " \u5347\u7D1A/\u5916\u98DF"), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("button", {
+      }), " special / eat out"), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("button", {
         className: "btn sm dk",
         onClick: saveCell
-      }, "\u5B58"), /*#__PURE__*/React.createElement("button", {
+      }, "SAVE"), /*#__PURE__*/React.createElement("button", {
         className: "btn sm",
         onClick: function () {
           setEditCell(null);
         }
-      }, "\u53D6\u6D88"))) : /*#__PURE__*/React.createElement("div", {
+      }, "CANCEL"))) : /*#__PURE__*/React.createElement("div", {
         className: "slot-empty",
         onClick: function () {
           setEditCell({
@@ -502,15 +503,15 @@ function MenuPage(props) {
           setCustom('');
           setSpecial(false);
         }
-      }, "+ \u6392\u4E00\u9813"));
+      }, "+ plan"));
     }));
   }), /*#__PURE__*/React.createElement("div", {
     className: "sec-title"
-  }, "\u63A1\u8CFC\u6E05\u55AE"), /*#__PURE__*/React.createElement("div", {
+  }, "SHOPPING LIST"), /*#__PURE__*/React.createElement("div", {
     className: "shop-add"
   }, /*#__PURE__*/React.createElement("input", {
     className: "inp sm",
-    placeholder: "\u8981\u8CB7\u4EC0\u9EBC",
+    placeholder: "add item",
     value: newItem,
     onChange: function (e) {
       setNewItem(e.target.value);
@@ -529,8 +530,8 @@ function MenuPage(props) {
   })), /*#__PURE__*/React.createElement("button", {
     className: "btn sm dk",
     onClick: addShop
-  }, "\u52A0")), shop.length === 0 ? /*#__PURE__*/React.createElement(Empty, {
-    text: "\u6E05\u55AE\u662F\u7A7A\u7684"
+  }, "ADD")), shop.length === 0 ? /*#__PURE__*/React.createElement(Empty, {
+    text: "list is empty"
   }) : shop.map(function (s) {
     return /*#__PURE__*/React.createElement("div", {
       key: s.id,
@@ -572,7 +573,7 @@ function RecipesPage(props) {
   }, [load]);
   function add() {
     if (!nm.trim() || !st.trim()) {
-      alert('名字和步驟都要填');
+      alert('name and steps required');
       return;
     }
     api(base, '/recipes', {
@@ -601,18 +602,18 @@ function RecipesPage(props) {
     onClick: function () {
       setAdding(!adding);
     }
-  }, adding ? '收起' : '+ 新食譜'), adding ? /*#__PURE__*/React.createElement("div", {
+  }, adding ? 'CLOSE' : '+ NEW RECIPE'), adding ? /*#__PURE__*/React.createElement("div", {
     className: "form-card"
   }, /*#__PURE__*/React.createElement("input", {
     className: "inp",
-    placeholder: "\u83DC\u540D",
+    placeholder: "dish name",
     value: nm,
     onChange: function (e) {
       setNm(e.target.value);
     }
   }), /*#__PURE__*/React.createElement("textarea", {
     className: "inp ta",
-    placeholder: '步驟(一行一步,精確到分鐘)',
+    placeholder: 'steps (one per line, precise to minutes)',
     value: st,
     onChange: function (e) {
       setSt(e.target.value);
@@ -627,11 +628,11 @@ function RecipesPage(props) {
     }
   }, /*#__PURE__*/React.createElement("option", {
     value: "1"
-  }, "\u2605 \u96F6\u5931\u6557"), /*#__PURE__*/React.createElement("option", {
+  }, "\u2605 EASY"), /*#__PURE__*/React.createElement("option", {
     value: "2"
-  }, "\u2605\u2605 \u8981\u9EDE\u624B\u611F"), /*#__PURE__*/React.createElement("option", {
+  }, "\u2605\u2605 MEDIUM"), /*#__PURE__*/React.createElement("option", {
     value: "3"
-  }, "\u2605\u2605\u2605 \u9032\u968E")), /*#__PURE__*/React.createElement("select", {
+  }, "\u2605\u2605\u2605 HARD")), /*#__PURE__*/React.createElement("select", {
     className: "inp sm",
     value: slot,
     onChange: function (e) {
@@ -639,15 +640,15 @@ function RecipesPage(props) {
     }
   }, /*#__PURE__*/React.createElement("option", {
     value: "any"
-  }, "\u4EFB\u610F\u9910\u6BB5"), /*#__PURE__*/React.createElement("option", {
+  }, "any slot"), /*#__PURE__*/React.createElement("option", {
     value: "morning"
-  }, "11:00 \u9806\u53E3"), /*#__PURE__*/React.createElement("option", {
+  }, "11:00 light"), /*#__PURE__*/React.createElement("option", {
     value: "evening"
-  }, "21:00 \u6B63\u9910"))), /*#__PURE__*/React.createElement("button", {
+  }, "21:00 main"))), /*#__PURE__*/React.createElement("button", {
     className: "btn sm dk",
     onClick: add
-  }, "\u5165\u5EAB")) : null, list.length === 0 ? /*#__PURE__*/React.createElement(Empty, {
-    text: "\u9084\u6C92\u6709\u98DF\u8B5C,\u5831\u83DC\u540D\u7D66 Lux \u5427"
+  }, "ADD")) : null, list.length === 0 ? /*#__PURE__*/React.createElement(Empty, {
+    text: "no recipes yet"
   }) : list.map(function (r) {
     const on = open === r.id;
     return /*#__PURE__*/React.createElement("div", {
@@ -662,7 +663,7 @@ function RecipesPage(props) {
       className: "recipe-name"
     }, r.name), /*#__PURE__*/React.createElement("span", {
       className: "recipe-meta"
-    }, stars(r.difficulty), " \xB7 \u505A\u904E ", r.times_cooked, " \u6B21")), on ? /*#__PURE__*/React.createElement("pre", {
+    }, stars(r.difficulty), " \xB7 cooked ", r.times_cooked, "\xD7")), on ? /*#__PURE__*/React.createElement("pre", {
       className: "steps"
     }, r.steps) : null);
   }));
@@ -720,7 +721,7 @@ function FridgePage(props) {
     className: "form-card"
   }, /*#__PURE__*/React.createElement("input", {
     className: "inp",
-    placeholder: "\u653E\u9032\u4E86\u4EC0\u9EBC(\u5982:\u9183\u96DE\u817F \xD73 \u888B)",
+    placeholder: "what goes in",
     value: nm,
     onChange: function (e) {
       setNm(e.target.value);
@@ -740,7 +741,7 @@ function FridgePage(props) {
     }, l.label);
   })), /*#__PURE__*/React.createElement("input", {
     className: "inp sm",
-    placeholder: "\u63D0\u793A(\u5982:\u4E00\u9031\u5167\u5403\u5B8C)",
+    placeholder: "note (e.g. use within 1 week)",
     value: hint,
     onChange: function (e) {
       setHint(e.target.value);
@@ -748,7 +749,7 @@ function FridgePage(props) {
   })), /*#__PURE__*/React.createElement("button", {
     className: "btn sm dk",
     onClick: add
-  }, "\u5165\u5EAB")), LOCS.map(function (l) {
+  }, "ADD")), LOCS.map(function (l) {
     const rows = list.filter(function (i) {
       return i.location === l.key;
     });
@@ -763,15 +764,15 @@ function FridgePage(props) {
         key: it.id
       }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", null, it.name), /*#__PURE__*/React.createElement("div", {
         className: "inv-meta"
-      }, it.added_on, " \u5165", it.expires_hint ? ' · ' + it.expires_hint : '')), /*#__PURE__*/React.createElement("button", {
+      }, it.added_on, it.expires_hint ? ' · ' + it.expires_hint : '')), /*#__PURE__*/React.createElement("button", {
         className: "btn sm",
         onClick: function () {
           useUp(it);
         }
-      }, "\u7528\u5B8C\u4E86"));
+      }, "USED"));
     }));
   }), list.length === 0 ? /*#__PURE__*/React.createElement(Empty, {
-    text: "\u51B0\u7BB1\u7A7A\u7A7A"
+    text: "fridge is empty"
   }) : null);
 }
 
@@ -803,7 +804,7 @@ function LogsPage(props) {
     const f = e.target.files && e.target.files[0];
     if (!f) return;
     compressImage(f).then(setPhotoB64).catch(function () {
-      alert('圖片處理失敗');
+      alert('image processing failed');
     });
   }
   function save() {
@@ -845,7 +846,7 @@ function LogsPage(props) {
     const r = recipes.find(function (x) {
       return x.id === id;
     });
-    return r ? r.name : '自由發揮';
+    return r ? r.name : 'freestyle';
   }
 
   // group by date
@@ -862,7 +863,7 @@ function LogsPage(props) {
     onClick: function () {
       setAdding(!adding);
     }
-  }, adding ? '收起' : '+ 記一頓'), adding ? /*#__PURE__*/React.createElement("div", {
+  }, adding ? 'CLOSE' : '+ LOG'), adding ? /*#__PURE__*/React.createElement("div", {
     className: "form-card"
   }, /*#__PURE__*/React.createElement("select", {
     className: "inp",
@@ -872,7 +873,7 @@ function LogsPage(props) {
     }
   }, /*#__PURE__*/React.createElement("option", {
     value: ""
-  }, "\u505A\u4E86\u4EC0\u9EBC(\u53EF\u4E0D\u9078)"), recipes.map(function (r) {
+  }, "(pick recipe, optional)"), recipes.map(function (r) {
     return /*#__PURE__*/React.createElement("option", {
       key: r.id,
       value: r.id
@@ -889,7 +890,7 @@ function LogsPage(props) {
     }, o.mark, " ", o.label);
   })), /*#__PURE__*/React.createElement("textarea", {
     className: "inp ta",
-    placeholder: "\u5FC3\u5F97/\u7FFB\u8ECA\u539F\u56E0(\u53EF\u7A7A)",
+    placeholder: "notes (optional)",
     value: note,
     onChange: function (e) {
       setNote(e.target.value);
@@ -901,18 +902,18 @@ function LogsPage(props) {
     className: "file-inp"
   }), photoB64 ? /*#__PURE__*/React.createElement("div", {
     className: "hint"
-  }, "\u7167\u7247\u5DF2\u5C31\u7DD2 \u2713") : null, /*#__PURE__*/React.createElement("button", {
+  }, "photo ready \u2713") : null, /*#__PURE__*/React.createElement("button", {
     className: "btn sm dk",
     disabled: busy,
     onClick: save
-  }, busy ? '上傳中…' : '存')) : null, dates.length === 0 ? /*#__PURE__*/React.createElement(Empty, {
-    text: "\u9084\u6C92\u958B\u904E\u4F19"
+  }, busy ? 'uploading…' : 'SAVE')) : null, dates.length === 0 ? /*#__PURE__*/React.createElement(Empty, {
+    text: "no logs yet"
   }) : dates.map(function (d) {
     return /*#__PURE__*/React.createElement("div", {
       key: d
     }, /*#__PURE__*/React.createElement("div", {
       className: "sec-title"
-    }, d, " \xB7 \u9031", wdName(d)), groups[d].map(function (l) {
+    }, d, " \xB7 ", wdName(d)), groups[d].map(function (l) {
       const o = OUTCOMES.find(function (x) {
         return x.key === l.outcome;
       }) || OUTCOMES[1];
@@ -933,7 +934,7 @@ function LogsPage(props) {
         className: "log-note"
       }, l.note) : null, l.lux_reply ? /*#__PURE__*/React.createElement("div", {
         className: "lux-reply"
-      }, "Lux:", l.lux_reply) : null);
+      }, "Lux: ", l.lux_reply) : null);
     }));
   }));
 }
